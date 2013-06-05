@@ -22,7 +22,7 @@ VERSION = '1.0'
 
 class Arrangement:
     def __init__(self):
-        self.pattern_str = '^2[0-9]+.+\.(jpg|png)'
+        self.pattern_str = '^2[0-9]+.+\.(jpg|png|mov)'
         self.testmode = False
         self.create_date_flg = True
         self.camera_root = os.path.realpath(os.path.dirname(__file__))
@@ -89,7 +89,10 @@ class Arrangement:
         """
         error = 'File pattern is not valid."%s" is skipped.'
         tmp = file_name.split(' ')
-        if len(tmp) != 2:
+        if len(tmp) < 2:
+            print error % file_name
+            return {}
+        if len(tmp) > 2 and re.sub(r'\..+$', '', tmp[2]) != "HDR":
             print error % file_name
             return {}
 
@@ -164,7 +167,7 @@ class Arrangement:
                 move_to = os.path.join(date, file_name)
             else:
                 move_to = os.path.join(month, file_name)
-        
+
         except:
             print 'Making directory failed! file[ %s ] error[ %s ]\n' % (file_name, traceback.format_exc())
 
